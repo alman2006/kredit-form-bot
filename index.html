@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azər Bank - Onlayn Nağd Kredit Sifarişi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="https://via.placeholder.com/150x50?text=Az%C9%99r+Bank+Loqosu" alt="Azər Bank Loqosu" class="logo">
+            <h1 class="fade-in-up">Onlayn Nağd Kredit Sifarişi</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="credit-form-card slide-in">
+                <h2>Kredit Kalkulyatoru</h2>
+                <div class="form-group">
+                    <label for="amount">Kredit Məbləği:</label>
+                    <input type="range" id="amount" min="100" max="1000" value="500">
+                    <span id="amountValue" class="value-display">500 AZN</span>
+                </div>
+                <div class="form-group">
+                    <label for="term">Kredit Müddəti (ay):</label>
+                    <input type="range" id="term" min="3" max="24" value="12">
+                    <span id="termValue">12 Ay</span>
+                </div>
+                <div class="result pulse">
+                    <p>Aylıq ödəniş: <span id="monthlyPayment">Hesablanır...</span></p>
+                </div>
+                <button type="button" class="apply-button animate-button">Kreditə Müraciət Et</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Azər Bank. Bütün hüquqlar qorunur.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

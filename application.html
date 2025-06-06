@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azər Bank - Kredit Müraciət Forması</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
+<body>
+    <header>
+        <div class="container">
+            <img src="https://via.placeholder.com/150x50?text=Az%C9%99r+Bank+Loqosu" alt="Azər Bank Loqosu" class="logo">
+            <h1 class="fade-in-up">Kredit Müraciət Forması</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="application-form-card slide-in">
+                <h2>Müraciət Məlumatları</h2>
+
+                <div class="summary-info">
+                    <p>Seçilmiş Kredit Məbləği: <span id="summaryAmount"></span></p>
+                    <p>Seçilmiş Kredit Müddəti: <span id="summaryTerm"></span></p>
+                    <p>Təxmini Aylıq Ödəniş: <span id="summaryPayment"></span></p>
+                </div>
+
+                <form id="creditApplicationForm">
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="form-group-app">
+                                <label for="firstName">Adınız:</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <div class="form-group-app">
+                                <label for="lastName">Soyadınız:</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="form-group-app">
+                                <label for="fatherName">Ata Adınız:</label>
+                                <input type="text" id="fatherName" name="fatherName" required>
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <div class="form-group-app">
+                                <label for="phoneNumber">Mobil Nömrə:</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Məs: 05X-XXX-XX-XX" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-column">
+                            <div class="form-group-app">
+                                <label for="email">E-mail Ünvanı:</label>
+                                <input type="email" id="email" name="email" placeholder="Optional">
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <div class="form-group-app">
+                                <label for="finCode">FİN Kodu (Şəxsiyyət Vəsiqəsi):</label>
+                                <input type="text" id="finCode" name="finCode" maxlength="7" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-button">Müraciəti Göndər</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Azər Bank. Bütün hüquqlar qorunur.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL-dən parametrləri almaq
+            const urlParams = new URLSearchParams(window.location.search);
+            const amount = urlParams.get('amount');
+            const term = urlParams.get('term');
+            const payment = urlParams.get('payment');
+
+            // Məlumatları səhifəyə yerləşdirmək
+            document.getElementById('summaryAmount').textContent = amount ? amount + ' AZN' : 'Təyin edilməyib';
+            document.getElementById('summaryTerm').textContent = term ? term + ' Ay' : 'Təyin edilməyib';
+            document.getElementById('summaryPayment').textContent = payment ? payment : 'Təyin edilməyib';
+
+            const applicationForm = document.getElementById('creditApplicationForm');
+            applicationForm.addEventListener('submit', async function(event) {
+                event.preventDefault(); // Formun standart göndərilməsini ləğv et
+
+                // Formadan məlumatları toplamaq
+                const formData = {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    fatherName: document.getElementById('fatherName').value,
+                    phoneNumber: document.getElementById('phoneNumber').value,
+                    email: document.getElementById('email').value,
+                    finCode: document.getElementById('finCode').value,
+                    selectedAmount: amount,
+                    selectedTerm: term,
+                    estimatedMonthlyPayment: payment
+                };
+
+                // Məlumatları PHP scriptinə göndərmək
+                try {
+                    const response = await fetch('submit_application.php', { // PHP faylının adı
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    });
+
+                    const data = await response.json(); // PHP-dən gələn JSON cavabı parse etmək
+
+                    if (response.ok && data.success) { // HTTP 200 OK və PHP-dən success: true
+                        alert('Müraciətiniz uğurla göndərildi! Tezliklə sizinlə əlaqə saxlanılacaq.');
+                        window.location.href = 'index.html'; // Müraciətdən sonra əsas səhifəyə qayıt
+                    } else {
+                        // Error mesajını göstər
+                        alert('Müraciət göndərilərkən xəta baş verdi: ' + (data.message || 'Naməlum xəta'));
+                    }
+                } catch (error) {
+                    console.error('Müraciət göndərilərkən xəta:', error);
+                    alert('Serverlə əlaqə qurularkən problem yarandı. PHP serverin işlədiyinə əmin olun.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
